@@ -39,12 +39,9 @@ export const Select = (props: SelectProps) => {
 		onChange: setIsOpen,
 	});
 
-	const handleOptionClick = (value: OptionType['value']) => {
-		const selectedOption = options.find((option) => option.value === value);
-		if (selectedOption) {
-			setIsOpen(false);
-			onChange?.(selectedOption);
-		}
+	const handleOptionClick = (option: OptionType) => {
+		setIsOpen(false);
+		onChange?.(option);
 	};
 	const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> = () => {
 		setIsOpen((isOpen) => !isOpen);
@@ -70,6 +67,7 @@ export const Select = (props: SelectProps) => {
 						styles.placeholder,
 						(styles as Record<string, string>)[optionClassName]
 					)}
+					data-status={status}
 					data-selected={!!selected?.value}
 					onClick={handlePlaceHolderClick}
 					role='button'
@@ -92,7 +90,7 @@ export const Select = (props: SelectProps) => {
 								<Option
 									key={option.value}
 									option={option}
-									onClick={handleOptionClick}
+									onClick={() => handleOptionClick(option)}
 								/>
 							))}
 					</ul>
