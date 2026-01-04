@@ -17,10 +17,4 @@
 	width: 100%;
 	height: auto;
 	margin-top: 26px;
-	// При широкой ширине (1394px) изображение должно касаться краев экрана
-	// Используем отрицательные margin для выхода за пределы контейнера
-	margin-left: calc((100vw - var(--container-width, 1394px)) / -2);
-	margin-right: calc((100vw - var(--container-width, 1394px)) / -2);
-	width: calc(100% + 100vw - var(--container-width, 1394px));
-	max-width: 100vw;
 }
