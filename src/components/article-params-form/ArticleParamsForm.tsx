@@ -24,7 +24,7 @@ type ArticleParamsFormProps = {
 };
 
 export const ArticleParamsForm = ({ appliedState, onApply }: ArticleParamsFormProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [formState, setFormState] = useState<ArticleStateType>(appliedState);
 	const sidebarRef = useRef<HTMLElement>(null);
 
@@ -35,14 +35,17 @@ export const ArticleParamsForm = ({ appliedState, onApply }: ArticleParamsFormPr
 
 	// Закрытие при клике вне сайдбара
 	useEffect(() => {
+		if (!isMenuOpen) {
+			return;
+		}
+
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
-				isOpen &&
 				sidebarRef.current &&
 				!sidebarRef.current.contains(event.target as Node) &&
 				!(event.target as HTMLElement).closest('[role="button"][aria-label*="Открыть/Закрыть"]')
 			) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
 
@@ -50,10 +53,10 @@ export const ArticleParamsForm = ({ appliedState, onApply }: ArticleParamsFormPr
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [isOpen]);
+	}, [isMenuOpen]);
 
 	const handleToggleSidebar = () => {
-		setIsOpen((prev) => !prev);
+		setIsMenuOpen((prev) => !prev);
 	};
 
 	const handleFontFamilyChange = (option: typeof fontFamilyOptions[number]) => {
@@ -79,21 +82,21 @@ export const ArticleParamsForm = ({ appliedState, onApply }: ArticleParamsFormPr
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onApply(formState);
-		setIsOpen(false);
+		setIsMenuOpen(false);
 	};
 
 	const handleReset = () => {
 		setFormState(defaultArticleState);
 		onApply(defaultArticleState);
-		setIsOpen(false);
+		setIsMenuOpen(false);
 	};
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={handleToggleSidebar} />
+			<ArrowButton isOpen={isMenuOpen} onClick={handleToggleSidebar} />
 			<aside
 				ref={sidebarRef}
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={clsx(styles.container, { [styles.container_open]: isMenuOpen })}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 					<div className={styles.title}>
 						<Text as='h2' size={31} weight={800} uppercase>
